@@ -59,6 +59,10 @@ export default (config = {}) => {
         {
           test: /\.json$/,
           loader: "json-loader",
+          exclude: [
+            path.resolve(__dirname, "content", "assets"),
+            path.resolve(__dirname, "content", "icons")
+          ]
         },
 
         // *.js => babel + eslint
@@ -222,7 +226,7 @@ export default (config = {}) => {
           },
         },
         {
-          test: /content(\/|\\).*\.(html|json|txt|ico|jpe?g|png|gif|mp4)$/,
+          test: /content(\/|\\).*\.(html|json|xml|txt|ico|jpe?g|png|gif|mp4)$/,
           loader: "file-loader" +
             "?name=[path][name].[ext]&context=" +
             path.join(config.cwd, config.source),

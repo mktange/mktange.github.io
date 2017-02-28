@@ -10,7 +10,7 @@ import store from "../src/store"
 
 phenomicClient({ metadata, routes, store })
 
-require.context("../content", true, /\.(html|json|txt|ico|jpe?g|png|gif|mp4)$/)
+require.context("../content", true, /\.(html|json|xml|ico|jpe?g|png|gif|mp4)$/)
 
 // md files processed via phenomic-loader to JSON & generate collection
 let mdContext = require.context("../content", true, /\.(md|markdown)$/)

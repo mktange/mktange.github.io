@@ -1,5 +1,6 @@
 ---
 title: Hi!
+metaTitle: mktange's blog
 layout: Homepage
 ---
 

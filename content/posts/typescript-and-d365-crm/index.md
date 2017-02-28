@@ -1,7 +1,7 @@
 ---
 title: TypeScript and Dynamics 365/CRM
 subtitle: Client-side coding done right
-date: 2016-02-26
+date: 2017-02-26
 layout: Post
 tags: TypeScript CRM D365 XrmDefinitelyTyped
 ---

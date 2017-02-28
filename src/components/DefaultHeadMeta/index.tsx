@@ -4,6 +4,7 @@ import Helmet from "react-helmet"
 interface DefaultHeadMetaProps {
   meta?: { name?: string, property?: string, content: string }[];
   scripts?: { src: string }[];
+  link?: { rel: string, href: string, sizes?: string, type?: string }[];
 }
 
 const DefaultHeadMeta: React.StatelessComponent<DefaultHeadMetaProps> = (props, { metadata: { pkg } }) => (
@@ -23,6 +24,7 @@ const DefaultHeadMeta: React.StatelessComponent<DefaultHeadMetaProps> = (props, 
         // { src: "https://cdn.polyfill.io/v2/polyfill.min.js" },
         ...props.scripts ? props.scripts : [],
       ] }
+      link={props.link}
     />
 
     { /* meta viewport safari/chrome/edge */ }
