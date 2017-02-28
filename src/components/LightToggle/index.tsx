@@ -27,8 +27,11 @@ class LightToggle extends React.Component<LightToggleProps, LightToggleState> {
   }
 
   calcTop() {
-    let scrollTop = typeof document !== "undefined" ? document.body.scrollTop : 0;
-    console.log(scrollTop);
+    let scrollTop = 
+      typeof document !== "undefined" ?
+        (document.documentElement && document.documentElement.scrollTop) || 
+        document.body.scrollTop
+        : 0;
     return scrollTop > 160 ? 10 : (170 - scrollTop)
   }
 

@@ -19,7 +19,8 @@ const DefaultHeadMeta: React.StatelessComponent<DefaultHeadMetaProps> = (props, 
         ...props.meta ? props.meta : [],
       ] }
       script={ [
-        { src: "https://cdn.polyfill.io/v2/polyfill.min.js" },
+        { src: "https://cdn.polyfill.io/v2/polyfill.min.js?features=es6&flags=gated" },
+        // { src: "https://cdn.polyfill.io/v2/polyfill.min.js" },
         ...props.scripts ? props.scripts : [],
       ] }
     />
