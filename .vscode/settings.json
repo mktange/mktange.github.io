@@ -1,0 +1,17 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "editor.tabSize": 2,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "node_modules": true
+    }
+    ,
+    "files.associations": {
+        "*.postcss": "scss",
+        "*.pcss": "scss"
+    },
+    "vsicons.presets.angular": false
+  }

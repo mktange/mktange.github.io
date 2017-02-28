@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "jsx": "preserve",
+        "module": "es6",
+        "moduleResolution": "node",
+        "noEmit": true,
+        "strictNullChecks": true,
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true
+    }
+}
