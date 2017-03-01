@@ -13,7 +13,7 @@ class Container extends React.Component<{}, ContainerState> {
   constructor() {
     super();
     let stored = typeof localStorage !== "undefined" ? localStorage.getItem('lightOn') : null;
-    this.state = { lightOn: stored == "true" };
+    this.state = { lightOn: !stored || stored == "true" };
   }
 
   static propTypes = {
