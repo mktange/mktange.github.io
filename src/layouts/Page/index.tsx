@@ -33,7 +33,7 @@ const Page: React.StatelessComponent<PhenomicPage> = (
 
   // const socialImage = head.hero && head.hero.match("://") ? head.hero
   //   : joinUri(process.env.PHENOMIC_USER_URL, head.hero)
-  const socialImage = null;
+  const socialImage = joinUri(process.env.PHENOMIC_USER_URL, "/assets/mktange-logo.png");
   
   const meta = [
     { property: "og:type", content: "article" },
