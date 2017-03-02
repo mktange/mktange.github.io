@@ -9,7 +9,7 @@ tags: TypeScript CRM D365 XrmDefinitelyTyped
 Coding and maintaining JavaScript for Dynamics 365/CRM can be quite a hassle if you don’t have a way to manage it properly. 
 Besides knowing how the client-side API works, it also relies on a lot of precise strings to accomplish anything meaningful in regard to the way the specific CRM system is set up.
 
-In this blog post, I will be focusing on the issues a developer usually encounter when coding web resources that interact with a form and its logic, 
+In this blog post, I will be focusing on the issues a developer usually encounters when coding web resources that interact with a form and its logic, 
 and how these issues can be alleviated using TypeScript — with the help of a tool called [XrmDefinitelyTyped](http://delegateas.github.io/Delegate.XrmDefinitelyTyped/).
 
 
@@ -28,14 +28,14 @@ Xrm.Page.ui.tabs.get("some_tab").getDisplayState();
 
 The problem here is that you need to know the ***exact*** string that is necessary when you want to access an attribute, a control, a tab, etc, 
 in order to get that object and interact with it. 
-And you better be sure that the element you are accessing in your code actually is present on the entity form — or else the user might experience this nasty error.
+And you better be sure that the element you are accessing in your code actually is present on the entity form — or users might experience this nasty error.
 
 <figure>
 <img src="script-error.png">
 <div class="caption">Nasty error your users will experience when an invalid string is used.</div>
 </figure>
 
-When dealing with attributes and controls, you also encounter the issue of needing to know what type the element holds. 
+When dealing with attributes and controls, you also encounter the issue of needing to know what ***type*** the element holds. 
 Is it a number attribute? A lookup field? An iframe control? JavaScript simply can't help you here.
 
 The main problem here is that CRM is dynamic, which means that the CRM JavaScript API also has to be. 
@@ -48,43 +48,42 @@ The main problem here is that CRM is dynamic.
 
 # Enter TypeScript
 
-[TypeScript](http://www.typescriptlang.org/) is a typed superset of JavaScript, which turns into regular JavaScript when it is run through the TypeScript compiler. 
-It is basically just JavaScript, but with types put on top of it. And with these types, you get clever intellisense and autocomplete features in your 
-IDE — and you can be more certain that what you code is actually correct code.
+[TypeScript](http://www.typescriptlang.org/) is a typed superset of JavaScript, which turns into regular JavaScript when it is run through the compiler. 
+It is written as JavaScript, but you are able to put types on top of it. And with these types, you are able to get type-checking and clever intellisense and autocomplete features in your IDE — which makes it more certain that what you code is actually correct code.
 
-Besides all the type benefits of using TypeScript, you also get access to other nice and future features of JavaScript (ES6+), such as classes, arrow functions, template strings, destructuring and much more. 
+Besides all the static type benefits of using TypeScript, you also get access to other nice and future features of JavaScript (ES6+), such as classes, arrow functions, template strings, destructuring and much more. 
 TypeScript also allows you to structure your code in namespaces, and as such makes it easy to contain and expose functionality as necessary.
 
 
 # Declaration files for CRM
 
-Declaration files are basically TypeScript files, which describe the functionality and types of a JavaScript library or API. 
-These files are not compiled into JavaScript, since they do no implement any new functionality but just describes it, which the TypeScript compiler then uses to infer types. 
-Thus they are not used at runtime, which means they do not slow down or add to your JavaScript code in any way.
+Declaration files are TypeScript files, which contains only type and function descriptions of a JavaScript library/API. 
+These files are not compiled into JavaScript, since they do not contain any implementation. The TypeScript compiler uses these files to infer types and check validity of your code that uses the described library. 
+The definitions in declaration files are only used by the compiler at compile-time, and is not included in the resulting code. This means that it **does not** slow down, or add to the outputted code JavaScript in any way.
 
 One way to use TypeScript with CRM is to use the [declaration files found on DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/xrm).
 
-The problem with using these declaration files, however, is that they are static. 
-They are generic to the CRM API and not tailored to a specific CRM configuration, and thus can not help with the bigger issues — like the *magic strings* and infering the types for each field.
+The problem with using these declaration files, however, is that they are ***static***. 
+They are generic to the CRM API and not tailored to a specific CRM configuration, and thus can not help with the main pains/issues — like the *magic strings* and infering the types for each field.
 
 
 # Dynamic declaration files to the rescue
 
-So we have established that since CRM is dynamic, the declaration files should be as well.
+So we can establish that since CRM is dynamic, the declaration files should be as well.
 
 When I started working on client-side code in CRM about two years ago, I took note of this issue, and immediately started looking for a solution. 
-And since no solution existed for this issue, I decided to build a tool to alleviate this problem.
+And since no solution existed which resolved this issue, I decided to build a tool to alleviate this problem.
 
-The tool is called [XrmDefinitelyTyped (XDT)](http://delegateas.github.io/Delegate.XrmDefinitelyTyped/) and was released in April 2015. 
+The tool is called [XrmDefinitelyTyped (XDT)](http://delegateas.github.io/Delegate.XrmDefinitelyTyped/) and was released to the public in April 2015. 
 It has since then been [expanded with lots of new features and functionality](http://delegateas.github.io/Delegate.XrmDefinitelyTyped/release-notes.html). 
-Also, it is open-source and be found on [GitHub](https://github.com/delegateas/Delegate.XrmDefinitelyTyped), if anyone wants to take a look at the code and chip in.
+It is open-source and be found on [GitHub](https://github.com/delegateas/Delegate.XrmDefinitelyTyped), if anyone wants to take a look at the code and chip in.
 
 <blockquote class="quote">
 It is the TypeScript equivalent of <a target="_blank" href="https://msdn.microsoft.com/en-us/library/gg327844.aspx">CrmSvcUtil</a>, but instead of generating early-bound .NET classes for server-side code, 
 it generates TypeScript interfaces for all your client-side coding.
 </blockquote>
 
-A base declaration file is created which describes the static interface for CRM — very similar to the static one found on DefinitelyTyped. 
+When the tool is run, a base declaration file is created which describes the static interface for CRM — very similar to the static one found on DefinitelyTyped. 
 But with XDT, declaration files are also made specifically for each form, which describes exactly how that form can be interacted with. 
 This means that the TypeScript compiler can know precisely which fields, sections, and tabs are available on it, as well as the necessary magic strings needed to perform meaningful operations.
 
