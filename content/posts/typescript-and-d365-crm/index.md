@@ -39,7 +39,7 @@ When dealing with attributes and controls, you also encounter the issue of needi
 Is it a number attribute? A lookup field? An iframe control? JavaScript simply can't help you here.
 
 The main problem here is that CRM is dynamic, which means that the CRM JavaScript API also has to be. 
-And this leads to the need for these precise strings — also known commonly known as *magic strings* in programming.
+And this leads to the need for these precise strings — also commonly known as *magic strings* in programming.
 
 <blockquote class="big-quote">
 The main problem here is that CRM is dynamic.
@@ -57,8 +57,8 @@ TypeScript also allows you to structure your code in namespaces, and as such mak
 
 # Declaration files for CRM
 
-Declaration files are TypeScript files, which contains only type and function descriptions of a JavaScript library/API. 
-These files are not compiled into JavaScript, since they do not contain any implementation. The TypeScript compiler uses these files to infer types and check validity of your code that uses the described library. 
+Declaration files are special TypeScript files, which describe how a JavaScript library/API can be used by declaring which types and functions are available, without specifying any of the actual library implementation. 
+The TypeScript compiler uses these files to infer types and check validity of your code for the described library. 
 The definitions in declaration files are only used by the compiler at compile-time, and is not included in the resulting code. This means that it **does not** slow down, or add to the outputted code JavaScript in any way.
 
 One way to use TypeScript with CRM is to use the [declaration files found on DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/xrm).
