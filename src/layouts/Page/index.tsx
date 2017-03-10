@@ -30,14 +30,16 @@ const Page: React.StatelessComponent<PhenomicPage> = (
   )
 
   const metaTitle = head.metaTitle ? head.metaTitle : head.title
-
+  
   const socialImage = 
     !head.image
     ? joinUri(process.env.PHENOMIC_USER_URL, "/assets/mktange-logo.png")
     : head.image.match("://") 
       ? head.image
-      : joinUri(process.env.PHENOMIC_USER_URL, head.image);
-  
+      : head.image.startsWith("/")
+        ? joinUri(process.env.PHENOMIC_USER_URL, head.image)
+        : joinUri(process.env.PHENOMIC_USER_URL, __url, head.image);
+
   const meta = [
     { property: "og:type", content: "article" },
     { property: "og:title", content: metaTitle },

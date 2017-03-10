@@ -4,9 +4,10 @@ subtitle: The type-safe approach with intellisense
 date: 2017-03-10
 layout: Post
 tags: Tip MsDynCRM MsDyn365 Plugin
+image: plugin-inputparameters.png
 ---
 
-Retrieving information from the InputParameters collection from a plugin execution context can be quite cumbersome task. The standard approach requires the need to know very specific *magic strings*, and casting of variables to the a specific type. This is, in my opinion, not a very good or maintainable approach. 
+Retrieving information from the InputParameters collection from a plugin execution context can be a quite cumbersome task. The standard approach requires the need to know very specific *magic strings*, and casting of variables to a specific type. This is, in my opinion, not a very good or maintainable approach. 
 
 In my quest to eliminate all uses of *magic strings* and *magic numbers* from my code, I have found a quite simple and neat solution to help with this issue, which I have not seen anyone else use so far.
 
@@ -57,7 +58,7 @@ For example, can you tell me which parameters (along with their types) are avail
 
 This approach removes the need for any magic strings, automatically provides the type of each retrieved value, and even provides intellisense when retrieving the information available in the InputParameters collection.
 
-And best of all, it is actually very simple. You just create a request of the matching type and pass in the parameters. This lets the request handle all the trouble of retrieving the information, and you even get intellisense to access the available parameters:
+And best of all, it is actually very simple. You just create a request of the matching type and pass in the parameters:
 
 ```csharp
 /* If the operation is Create */
