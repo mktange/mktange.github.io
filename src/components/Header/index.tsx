@@ -46,9 +46,9 @@ const Header: React.StatelessComponent<HeaderProps> = (props, { metadata: { pkg 
           <i className="fa fa-angle-left"></i>&nbsp; Home
         </Link>
       }
-      <Link className={ [styles.btn, styles.right].join(' ') } to={ "/feed.xml" }>
+      <a className={ [styles.btn, styles.right].join(' ') } href={ "/feed.xml" }>
         <i className="fa fa-rss"></i>&nbsp; Subscribe
-      </Link>
+      </a>
     </nav>
   </header>
 );

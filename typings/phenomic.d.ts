@@ -34,6 +34,7 @@ interface PhenomicHead {
   comments?: boolean;
   tags?: string;
   layout?: string;
+  image?: string;
 }
 
 interface PhenomicPageHead<LayoutNames> extends PhenomicPageMetadata, PhenomicHead {
