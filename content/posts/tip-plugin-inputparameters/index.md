@@ -46,7 +46,7 @@ Not only do you need to know the magic strings necessary to get any information 
 The above cases even show that the same key can even have different types depending on the event-operation — which can lead to great confusion and non-working code the first time you encounter it as a developer.
 
 One can quite quickly learn which parameters and types are present in the most basic operations (CRUD). 
-But when it comes to operations that you are not familiar, it can be very cumbersome to look up the necessary magic strings and types, and use them correctly on the InputParameters collection. 
+But when it comes to operations that you are not familiar, you have to look up the necessary magic strings and types online, and then use them correctly on the InputParameters collection. 
 
 For example, can you tell me which parameters (along with their types) are available during a **WinOpportunity**-operation? Would you have to check online to figure it out?
 
