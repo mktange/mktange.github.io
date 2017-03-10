@@ -17,25 +17,25 @@ const Header: React.StatelessComponent<HeaderProps> = (props, { metadata: { pkg 
     <nav className={ styles.socialNav }>
         {
           pkg.email &&
-          <a href={ `mailto:${pkg.email}` } className={ styles.socialBtn }>
+          <a href={ `mailto:${pkg.email}` } className={ styles.socialBtn + " " + styles.email }>
             <i className="fa fa-envelope"></i>
           </a>
         }
         {
           pkg.twitter &&
-          <a href={ `https://twitter.com/${pkg.twitter}` } target="_blank" className={ styles.socialBtn }>
+          <a href={ `https://twitter.com/${pkg.twitter}` } target="_blank" className={ styles.socialBtn + " " + styles.twitter }>
             <i className="fa fa-twitter fa-lg"></i>
           </a>
         }
         {
           pkg.github &&
-          <a href={ `https://github.com/${pkg.github}` } target="_blank" className={ styles.socialBtn }>
+          <a href={ `https://github.com/${pkg.github}` } target="_blank" className={ styles.socialBtn + " " + styles.github }>
             <i className="fa fa-github fa-lg"></i>
           </a>
         }
         {
           pkg.linkedin &&
-          <a href={ `https://www.linkedin.com/in/${pkg.linkedin}` } target="_blank" className={ styles.socialBtn }>
+          <a href={ `https://www.linkedin.com/in/${pkg.linkedin}` } target="_blank" className={ styles.socialBtn + " " + styles.linkedIn }>
             <i className="fa fa-linkedin"></i>
           </a>
         }
