@@ -3,7 +3,7 @@ title: TypeScript and Dynamics 365/CRM
 subtitle: Client-side coding done right
 date: 2017-02-26
 layout: Post
-tags: TypeScript CRM D365 XrmDefinitelyTyped
+tags: TypeScript MsDynCRM MsDyn365 XrmDefinitelyTyped
 ---
 
 Coding and maintaining JavaScript for Dynamics 365/CRM can be quite a hassle if you don’t have a way to manage it properly. 
@@ -76,11 +76,10 @@ And since no solution existed which resolved this issue, I decided to build a to
 
 The tool is called [XrmDefinitelyTyped (XDT)](http://delegateas.github.io/Delegate.XrmDefinitelyTyped/) and was released to the public in April 2015. 
 It has since then been [expanded with lots of new features and functionality](http://delegateas.github.io/Delegate.XrmDefinitelyTyped/release-notes.html). 
-It is open-source and be found on [GitHub](https://github.com/delegateas/Delegate.XrmDefinitelyTyped), if anyone wants to take a look at the code and chip in.
+It is open-source and can be found on [GitHub](https://github.com/delegateas/Delegate.XrmDefinitelyTyped), if anyone wants to take a look at the code and chip in.
 
 <blockquote class="quote">
-It is the TypeScript equivalent of <a target="_blank" href="https://msdn.microsoft.com/en-us/library/gg327844.aspx">CrmSvcUtil</a>, but instead of generating early-bound .NET classes for server-side code, 
-it generates TypeScript interfaces for all your client-side coding.
+It is the TypeScript equivalent of <a target="_blank" href="https://msdn.microsoft.com/en-us/library/gg327844.aspx">CrmSvcUtil</a>, but instead of generating early-bound .NET classes for server-side code, it generates TypeScript interfaces for all your client-side coding.
 </blockquote>
 
 When the tool is run, a base declaration file is created which describes the static interface for CRM — very similar to the static one found on DefinitelyTyped. 
