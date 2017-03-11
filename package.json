@@ -12,7 +12,6 @@
   "googleAnalyticsUA": "UA-83618719-1",
   "repository": "https://github.com/mktange/mktange.github.io",
   "scripts": {
-    "lint:js": "eslint --ignore-path .gitignore --fix .",
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint": "npm-run-all --parallel lint:*",
     "start": "phenomic start",
