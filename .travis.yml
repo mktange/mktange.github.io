@@ -5,7 +5,7 @@ node_js:
 deploy:
   skip_cleanup: true
   provider: script
-  script: "./scripts/travis-deploy.sh"
+  script: chmod +x scripts/travis-deploy.sh && scripts/travis-deploy.sh
   'on':
     branch: src
     node: '5'
