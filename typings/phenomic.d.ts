@@ -32,7 +32,7 @@ interface PhenomicHead {
   date?: string;
   description?: string;
   comments?: boolean;
-  tags?: string;
+  tags?: string[];
   layout?: string;
   image?: string;
 }

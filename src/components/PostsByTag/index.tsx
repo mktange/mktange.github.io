@@ -12,8 +12,9 @@ interface PostsByTagProps {
 }
 
 const PostsByTag: React.StatelessComponent<PostsByTagProps> = ({ params: { tag } }, { collection }) => {
+  const lowerCaseTag = tag.toLowerCase();
   const tagPosts = enhanceCollection<LayoutNames>(collection, {
-    filter: (item) => item.layout == "Post" && item.tags && item.tags.split(" ").findIndex(t => t == tag) > -1,
+    filter: (item) => item.layout == "Post" && item.tags && item.tags.findIndex && item.tags.findIndex(t => t.toLowerCase() == lowerCaseTag) > -1,
     sort: "date",
     reverse: true,
   });

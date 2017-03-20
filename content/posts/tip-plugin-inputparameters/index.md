@@ -3,7 +3,11 @@ title: "Tip: Proper handling of Plugin InputParameters"
 subtitle: The type-safe approach with intellisense
 date: 2017-03-10
 layout: Post
-tags: Tip MsDynCRM MsDyn365 Plugin
+tags: 
+    - Tip 
+    - MsDynCRM 
+    - MsDyn365 
+    - Plugin
 image: plugin-inputparameters.png
 ---
 

@@ -3,7 +3,11 @@ title: TypeScript and Dynamics 365/CRM
 subtitle: Client-side coding done right
 date: 2017-02-26
 layout: Post
-tags: TypeScript MsDynCRM MsDyn365 XrmDefinitelyTyped
+tags: 
+  - TypeScript
+  - MsDynCRM
+  - MsDyn365
+  - XrmDefinitelyTyped
 ---
 
 Coding and maintaining JavaScript for Dynamics 365/CRM can be quite a hassle if you don’t have a way to manage it properly. 

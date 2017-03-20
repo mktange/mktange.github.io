@@ -25,7 +25,7 @@ const PagePreview: React.StatelessComponent<PhenomicPageHead<LayoutNames>> = ({ 
         </span>
         <span className={ styles.tagLine }>
         {
-          tags && tags.length && tags.split(" ").map(tag => (
+          tags && tags.length && tags.map(tag => (
             <Link key={tag} to= { `/tag/${tag}` } className="tag">#{tag}</Link>
           ))
         }
