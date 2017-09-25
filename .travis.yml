@@ -3,18 +3,15 @@ node_js:
   - '5'
   - '4'
 deploy:
+  provider: pages
   skip_cleanup: true
-  provider: script
-  script: chmod +x scripts/travis-deploy.sh && scripts/travis-deploy.sh
-  'on':
+  github_token: $GITHUB_TOKEN
+  local_dir: dist
+  target_branch: master
+  on:
     branch: src
     node: '5'
 notifications:
   email:
     on_success: never # default: change
     on_failure: always # default: always
-env:
-  global:
-    - secure: >-
-        T8uTKciaz8u+WCB45UyLtttljoBg+rUJVhCIWLv2ZmC6W4x1MVGDD6EaOo6n2sf/YG62yMjnSlbljWYZPLNmknJ0L9Z/SGMkgkhD3shoKQfGnnWYXxqELSf8GC48BDLwFZ1sU7rzP8OPYrZny+ODVEIVBSZVMcGuBPOhHtkJ1vIhOB1C/qbg5eXvStH/C9mBakskUGGdSzvKI1SocIxZ+4Jo3IZtwedwI7PZCkLAfiVy52fKrhAkFhEAmYIdUpHIOa7toAR/BtFVBAer8d7ftRY75BHJyfgrFVfZwqemS0naRNP82XAigenC0aiDUAB2+/poLSQyekbZILqlf8zy+/F0I02qXYcEQy/6Oboik5fdguVyc3DOBobBfAaQ8MNrx7v+gIsqTJhVDnqQ+2hgJfZcuGDRUyDh2oDGbY8IV+khj1y+KphlyVkf1ZqF9qLXh1XXl2JjOkOTQUYfvLNpKuLvTrQtdB2aiNpTwtAZ+ymyEZV3seMSLSWelTBP9eSi+ZN7OWnP/YevpKPjlNZNt6hni90RJJEb94mria5BnEPk1as8FuywrOhjJSsT/1adcD9nHvcB7PtZ0RCyx9wXxW6tQ7G+XhwquymAZ3BDx3V45DrmUy5OQ+fVt9LDVfyDGqnFD1S0+Kghmh16R48sNaPTbR9XaGtDuVICijvMrIY=
-    - GIT_DEPLOY_REPO=https://$GITHUB_TOKEN@github.com/mktange/mktange.github.io.git
