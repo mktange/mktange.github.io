@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[mktange-site]]></title><description><![CDATA[mktange-site]]></description><link>http://mktange.com</link><generator>RSS for Node</generator><lastBuildDate>Mon, 25 Sep 2017 05:20:57 GMT</lastBuildDate><atom:link href="http://mktange.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Tip: Proper handling of Plugin InputParameters]]></title><description><![CDATA[<p>Retrieving information from the InputParameters collection from a plugin execution context can be a quite cumbersome task. The standard approach requires the need to know very specific <em>magic strings</em>, and casting of variables to a specific type. This is, in my opinion, not a very good or maintainable approach. </p>
+<p>In my quest to eliminate all uses of <em>magic strings</em> and <em>magic numbers</em> from my code, I have found a quite simple and neat solution to help with this issue, which I have not seen anyone else use so far.</p>
+<h1 id="the-standard-approach"><a href="#the-standard-approach" class="phenomic-HeadingAnchor">#</a>The standard approach</h1>
+<p>The most commonly-used method is to do as shown in the <a href="https://msdn.microsoft.com/en-us/library/gg309673.aspx#Anchor_4">MSDN docs</a>:</p>
+<pre><code class="hljs language-csharp"><span class="hljs-keyword">if</span> (context.InputParameters.Contains(<span class="hljs-string">"Target"</span>) &#x26;&#x26;
+    context.InputParameters[<span class="hljs-string">"Target"</span>] <span class="hljs-keyword">is</span> Entity)
+{
+    <span class="hljs-comment">// Obtain the target entity from the input parameters.</span>
+    Entity entity = (Entity)context.InputParameters[<span class="hljs-string">"Target"</span>];
+}</code></pre>
+<div class="caption">
+  Example of getting <code>"Target"</code> parameter when the operation is <b>Create</b>.
+</div>
+<p>In order to retrieve the target entity safely from the InputParameters collection, we have to go through quite a few checks and use the magic string <code>"Target"</code> a few times. The type of the retrieved value is also checked to be an <code>Entity</code>, before casting the value to that type.</p>
+<p>Now during a <strong>Delete</strong>-operation, there is also a <code>"Target"</code> in the InputParameters collection. This time, however, it has the type <code>EntityReference</code>:</p>
+<pre><code class="hljs language-csharp"><span class="hljs-keyword">if</span> (context.InputParameters.Contains(<span class="hljs-string">"Target"</span>) &#x26;&#x26; 
+    context.InputParameters[<span class="hljs-string">"Target"</span>] <span class="hljs-keyword">is</span> EntityReference)
+{
+    <span class="hljs-comment">// Obtain the target entity reference from the input parameters.</span>
+    EntityReference entity = (EntityReference)context.InputParameters[<span class="hljs-string">"Target"</span>];
+}</code></pre>
+<div class="caption">
+  Example of getting <code>"Target"</code> parameter when the operation is <b>Delete</b>.
+</div>
+<p>Not only do you need to know the magic strings necessary to get any information from the InputParameters collection (in this case <code>"Target"</code>), but you also need to know the output type.
+The above cases even show that the same key can even have different types depending on the event-operation — which can lead to great confusion and non-working code the first time you encounter it as a developer.</p>
+<p>One can quite quickly learn which parameters and types are present in the most basic operations (CRUD).
+But when it comes to operations that you are not familiar, you have to look up the necessary magic strings and types online, and then use them correctly on the InputParameters collection. </p>
+<p>For example, can you tell me which parameters (along with their types) are available during a <strong>WinOpportunity</strong>-operation? Would you have to check online to figure it out?</p>
+<h1 id="the-type-safe-approach"><a href="#the-type-safe-approach" class="phenomic-HeadingAnchor">#</a>The type-safe approach</h1>
+<p>This approach removes the need for any magic strings, automatically provides the type of each retrieved value, and even provides intellisense when retrieving the information available in the InputParameters collection.</p>
+<p>And best of all, it is actually very simple. You just create a request of the matching type and pass in the parameters:</p>
+<pre><code class="hljs language-csharp"><span class="hljs-comment">/* If the operation is Create */</span>
+<span class="hljs-keyword">var</span> createReq = <span class="hljs-keyword">new</span> CreateRequest() { Parameters = context.InputParameters };
+createReq.Target; <span class="hljs-comment">// Has type Entity</span></code></pre>
+<pre><code class="hljs language-csharp"><span class="hljs-comment">/* If the operation is Delete */</span>
+<span class="hljs-keyword">var</span> deleteReq = <span class="hljs-keyword">new</span> DeleteRequest() { Parameters = context.InputParameters };
+deleteReq.Target; <span class="hljs-comment">// Has type EntityReference</span></code></pre>
+<pre><code class="hljs language-csharp"><span class="hljs-comment">/* If the operation is WinOpportunity */</span>
+<span class="hljs-keyword">var</span> winOppReq = <span class="hljs-keyword">new</span> WinOpportunityRequest() { Parameters = context.InputParameters };
+winOppReq.OpportunityClose; <span class="hljs-comment">// Has type Entity (OpportunityClose)</span>
+winOppReq.Status; <span class="hljs-comment">// Has type OptionSetValue</span></code></pre>
+<div class="caption">
+  Examples of using the alternative approach to handle InputParameters from a plugin execution context.
+</div>
+<p>All standard SDK requests are found in either <code>Microsoft.Xrm.Sdk.Messages</code> or <code>Microsoft.Crm.Sdk.Messages</code>, so be sure to include those with a <code>using</code>-statement.</p>
+<p>Note that some requests can have "hidden" optional parameters, which are not defined as actual properties on the request. For example, <code>"SolutionUniqueName"</code> is a valid parameter for Create (<a href="https://msdn.microsoft.com/en-us/library/gg328075.aspx#bkmk_optional_params">and a few others</a>), but is not a property on the <code>CreateRequest</code> class. Unfortunately, these still have to be accessed using the standard approach with magic strings and type-casting.</p>
+<p>This approach makes it much easier and simpler to safely handle InputParameters in plugin logic, and you (almost) never have to look up parameters for InputParameters again.</p>
+]]></description><link>http://mktange.com/posts/tip-plugin-inputparameters/</link><guid isPermaLink="true">http://mktange.com/posts/tip-plugin-inputparameters/</guid><pubDate>Fri, 10 Mar 2017 00:00:00 GMT</pubDate></item><item><title><![CDATA[TypeScript and Dynamics 365/CRM]]></title><description><![CDATA[<p>Coding and maintaining JavaScript for Dynamics 365/CRM can be quite a hassle if you don’t have a way to manage it properly.
+Besides knowing how the client-side API works, it also relies on a lot of precise strings to accomplish anything meaningful in regard to the way the specific CRM system is set up.</p>
+<p>In this blog post, I will be focusing on the issues a developer usually encounters when coding web resources that interact with a form and its logic,
+and how these issues can be alleviated using TypeScript — with the help of a tool called <a href="https://github.com/delegateas/XrmDefinitelyTyped/wiki">XrmDefinitelyTyped</a>.</p>
+<h1 id="problems-with-plain-javascript"><a href="#problems-with-plain-javascript" class="phenomic-HeadingAnchor">#</a>Problems with plain JavaScript</h1>
+<p>To add logic to a form in CRM, you use the client-side API called <code>Xrm.Page</code>. By using this you can interact with attribute values, add form logic on certain events,
+and manipulate how the form looks and acts. To access elements on a form, you need to use the logical name of the element you want in a matching getter function.</p>
+<pre><code class="hljs language-typescript">Xrm.Page.getAttribute(<span class="hljs-string">"donotphone"</span>).getValue();
+Xrm.Page.getAttribute(<span class="hljs-string">"primarycontactid"</span>).setValue([{ id: <span class="hljs-string">"GUID"</span>, entityType: <span class="hljs-string">"contact"</span> }]);
+Xrm.Page.ui.tabs.get(<span class="hljs-string">"some_tab"</span>).getDisplayState();</code></pre>
+<div class="caption">Example usage of the form API.</div>
+<p>The problem here is that you need to know the <strong><em>exact</em></strong> string that is necessary when you want to access an attribute, a control, a tab, etc,
+in order to get that object and interact with it.
+And you better be sure that the element you are accessing in your code actually is present on the entity form — or users might experience this nasty error.</p>
+<figure>
+<img src="script-error.png">
+<div class="caption">Nasty error your users will experience when an invalid string is used.</div>
+</figure>
+<p>When dealing with attributes and controls, you also encounter the issue of needing to know what <strong><em>type</em></strong> the element holds.
+Is it a number attribute? A lookup field? An iframe control? JavaScript simply can't help you here.</p>
+<p>The main problem here is that CRM is dynamic, which means that the CRM JavaScript API also has to be.
+And this leads to the need for these precise strings — also commonly known as <em>magic strings</em> in programming.</p>
+<blockquote class="big-quote">
+The main problem here is that CRM is dynamic.
+</blockquote>
+<h1 id="enter-typescript"><a href="#enter-typescript" class="phenomic-HeadingAnchor">#</a>Enter TypeScript</h1>
+<p><a href="http://www.typescriptlang.org/">TypeScript</a> is a typed superset of JavaScript, which turns into regular JavaScript when it is run through the compiler.
+It is written as JavaScript, but you are able to put types on top of it. And with these types, you are able to get type-checking and clever intellisense and autocomplete features in your IDE — which makes it more certain that what you code is actually correct code.</p>
+<p>Besides all the static type benefits of using TypeScript, you also get access to other nice and future features of JavaScript (ES6+), such as classes, arrow functions, template strings, destructuring and much more.
+TypeScript also allows you to structure your code in namespaces, and as such makes it easy to contain and expose functionality as necessary.</p>
+<h1 id="declaration-files-for-crm"><a href="#declaration-files-for-crm" class="phenomic-HeadingAnchor">#</a>Declaration files for CRM</h1>
+<p>Declaration files are special TypeScript files, which describe how a JavaScript library/API can be used by declaring which types and functions are available, without specifying any of the actual library implementation.
+The TypeScript compiler uses these files to infer types and check validity of your code for the described library.
+The definitions in declaration files are only used by the compiler at compile-time, and is not included in the resulting code. This means that it <strong>does not</strong> slow down, or add to the outputted code JavaScript in any way.</p>
+<p>One way to use TypeScript with CRM is to use the <a href="https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/xrm">declaration files found on DefinitelyTyped</a>.</p>
+<p>The problem with using these declaration files, however, is that they are <strong><em>static</em></strong>.
+They are generic to the CRM API and not tailored to a specific CRM configuration, and thus can not help with the main pains/issues — like the <em>magic strings</em> and infering the types for each field.</p>
+<h1 id="dynamic-declaration-files-to-the-rescue"><a href="#dynamic-declaration-files-to-the-rescue" class="phenomic-HeadingAnchor">#</a>Dynamic declaration files to the rescue</h1>
+<p>So we can establish that since CRM is dynamic, the declaration files should be as well.</p>
+<p>When I started working on client-side code in CRM about two years ago, I took note of this issue, and immediately started looking for a solution.
+And since no solution existed which resolved this issue, I decided to build a tool to alleviate this problem.</p>
+<p>The tool is called <a href="https://github.com/delegateas/XrmDefinitelyTyped/wiki">XrmDefinitelyTyped (XDT)</a> and was released to the public in April 2015.
+It has since then been <a href="http://delegateas.github.io/Delegate.XrmDefinitelyTyped/release-notes.html">expanded with lots of new features and functionality</a>.
+It is open-source and can be found on <a href="https://github.com/delegateas/XrmDefinitelyTyped">GitHub</a>, if anyone wants to take a look at the code and chip in.</p>
+<blockquote class="quote">
+It is the TypeScript equivalent of <a target="_blank" href="https://msdn.microsoft.com/en-us/library/gg327844.aspx">CrmSvcUtil</a>, but instead of generating early-bound .NET classes for server-side code, it generates TypeScript interfaces for all your client-side coding.
+</blockquote>
+<p>When the tool is run, a base declaration file is created which describes the static interface for CRM — very similar to the static one found on DefinitelyTyped.
+But with XDT, declaration files are also made specifically for each form, which describes exactly how that form can be interacted with.
+This means that the TypeScript compiler can know precisely which fields, sections, and tabs are available on it, as well as the necessary magic strings needed to perform meaningful operations.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">interface</span> Contact <span class="hljs-keyword">extends</span> Xrm.PageBase&#x3C;Contact.Attributes,Contact.Tabs,Contact.Controls> {
+  getAttribute(attributeName: <span class="hljs-string">"fullname"</span>): Xrm.Attribute&#x3C;<span class="hljs-built_in">string</span>>;
+  getAttribute(attributeName: <span class="hljs-string">"jobtitle"</span>): Xrm.Attribute&#x3C;<span class="hljs-built_in">string</span>>;
+  getAttribute(attributeName: <span class="hljs-string">"parentcustomerid"</span>): Xrm.LookupAttribute;
+  getAttribute(attributeName: <span class="hljs-string">"emailaddress1"</span>): Xrm.Attribute&#x3C;<span class="hljs-built_in">string</span>>;
+  getAttribute(attributeName: <span class="hljs-string">"telephone1"</span>): Xrm.Attribute&#x3C;<span class="hljs-built_in">string</span>>;
+  getAttribute(attributeName: <span class="hljs-string">"address1_composite"</span>): Xrm.Attribute&#x3C;<span class="hljs-built_in">string</span>>;
+  getAttribute(attributeName: <span class="hljs-string">"gendercode"</span>): Xrm.OptionSetAttribute&#x3C;contact_gendercode>;
+  getAttribute(attributeName: <span class="hljs-string">"familystatuscode"</span>): Xrm.OptionSetAttribute&#x3C;contact_familystatuscode>;
+…</code></pre>
+<div class="caption">
+Snippet from a generated declaration file which describes a contact form.
+</div>
+<p>Besides declarations for forms, it can also generate interfaces for entities to be used in API calls towards the database — both the old REST endpoint <strong><em>and the new Web API</em></strong>.</p>
+<h1 id="developer-efficiency"><a href="#developer-efficiency" class="phenomic-HeadingAnchor">#</a>Developer efficiency</h1>
+<p>Having TypeScript along with the dynamic declaration files immensely improves the development experience when dealing with the JavaScript APIs of CRM.
+Having the code <strong>checked for validity at compile-time</strong> (instead of at run-time — on the CRM form) helps you save a lot of time developing and maintaining code.
+You can be certain that the code you have written is correct according to the API, without typos, and that all the magic strings are correctly typed and valid in the given context.</p>
+<p>Not only does it check that the string parameters are correct, but it can even autocomplete them for you!
+The other major benefit is that the compiler also knows exactly what type of attribute/control/entity it should expect at all times.</p>
+<p>Besides the form logic declaration files, XDT also includes TypeScript libraries for making calls towards the database.
+These makes it possible to create calls to the CRM database in a completely type-safe manner with a LINQ-like query syntax, instead of having to construct your own OData query strings.
+This library is called <a href="https://github.com/delegateas/XrmDefinitelyTyped/wiki/XrmQuery-Web-API">XrmQuery</a>, and it exists in two instances, one for each of the OData endpoints. The libraries work in tandem with declaration files generated by
+XDT specifically for that purpose. In a later blog post I will be addressing XrmQuery in more detail.</p>
+<figure>
+  <video width="100%" controls="true" muted="true">
+    <source src="xdt-demo-x1_25.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <figcaption>Demonstration of various TypeScript features with XrmDefinitelyTyped (2min)</figcaption>
+</figure>
+<h1 id="upgrade-your-code-nowno-excuses"><a href="#upgrade-your-code-nowno-excuses" class="phenomic-HeadingAnchor">#</a>Upgrade your code now — no excuses</h1>
+<p>Using the <a href="https://github.com/delegateas/XrmDefinitelyTyped/wiki/Getting-started">quick-start guide</a>, you can get your project set up with XDT in a few minutes.
+Converting your code to TypeScript is usually quite straightforward. Just change your files from <code>.js</code> to <code>.ts</code>, and then the compiler will tell you exactly what may be problematic with the current code, which makes it quick and easy to fix.</p>
+]]></description><link>http://mktange.com/posts/typescript-and-d365-crm/</link><guid isPermaLink="true">http://mktange.com/posts/typescript-and-d365-crm/</guid><pubDate>Sun, 26 Feb 2017 00:00:00 GMT</pubDate></item></channel></rss>
